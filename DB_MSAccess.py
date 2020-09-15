@@ -52,7 +52,10 @@ class DB():
         return None
 
     def getColumnsName(self, tableName):
-        return [name for row in self.crsr.columns(tableName)]
+        return [row.column_name for row in self.crsr.columns(tableName)]
+
+    def getRowsNumber(self, tableName):
+        return len(self.crsr.execute("select * from " + tableName).fetchall())
 
     def WriteTableWithDataList(self, table_name, DataList):  
         """一次寫入多行數據"""
@@ -63,15 +66,15 @@ class DB():
 
     @property
     def tableNames(self):
-        return [names for row in self.crsr.tables()]
+        return [row.table_name for row in self.crsr.tables()]
 
-    def _insertSQL(self):
+    def _insertSQL(self, tableName):
         Columns = "" 
         values = ""
-        for each in self.getColumnsName(table_name):
+        for each in self.getColumnsName(tableName):
             Columns += str(each)+","
             values += r"?,"        
-        SQL = "insert into " + table_name + "(" + Columns[:-1] + ") values (" + values[:-1] + ")"
+        SQL = "insert into " + tableName + "(" + Columns[:-1] + ") values (" + values[:-1] + ")"
         return SQL
 
 if __name__ == "__main__":
