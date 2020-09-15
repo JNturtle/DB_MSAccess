@@ -38,17 +38,17 @@ class DB():
         # 以數量確認是否存在  
         return len(checkPoint) != 0
 
-    def createTable(self, newTableName, sourceTable = "0000", SHOWTEXT = self.SHOWTEXT):
+    def createTable(self, newTableName, sourceTable = "0000"):
         """
         如果表格不存在，從 table_source 複製結構並輸出成 new_table_name
         """
         if newTableName in tableNames:
-            if SHOWTEXT :print(newTableName, "已經存在於資料庫")
+            if self.SHOWTEXT :print(newTableName, "已經存在於資料庫")
             exist = True
         else:
             self.crsr.execute( "select * into " + newTableName + " from " + sourceTable + " where 1=0 ")
             self.cnxn.commit()  
-            if SHOWTEXT :print("已經創立", newTableName, "到資料庫")
+            if self.SHOWTEXT :print("已經創立", newTableName, "到資料庫")
         return None
 
     def getColumnsName(self, tableName):
@@ -75,6 +75,7 @@ class DB():
         return SQL
 
 if __name__ == "__main__":
-    db = DB(r'C:\Users\User\source\repos\DB_MSAccess\test.accdb')
+    import os   
+    db = DB(os.path.join(os.getcwd(), 'test.accdb'))
 
     
